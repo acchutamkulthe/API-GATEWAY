@@ -11,3 +11,18 @@ eureka:
 spring:
   application:
     name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: DEMO-SERVICE
+          uri: lb://DEMO-SERVICE
+          predicates:
+            - Path=/api/demo/**
+        - id: MASTER-SERVICE
+          uri: ec2-18-212-64-146.compute-1.amazonaws.com:9090
+          predicates:
+            - Path=/question/**
+
+
+
+
