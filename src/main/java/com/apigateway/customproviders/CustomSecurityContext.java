@@ -1,4 +1,3 @@
-/*
 package com.apigateway.customproviders;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ public class CustomSecurityContext implements ServerSecurityContextRepository {
 
     @Override
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
+        System.out.println("Inside load method ::");
         return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(authHeader -> authHeader.startsWith("Bearer "))
                 .flatMap(authHeader -> {
@@ -37,4 +37,3 @@ public class CustomSecurityContext implements ServerSecurityContextRepository {
                 });
     }
 }
-*/

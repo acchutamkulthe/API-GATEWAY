@@ -19,7 +19,7 @@ spring:
           predicates:
             - Path=/api/demo/**
         - id: MASTER-SERVICE
-          uri: ec2-18-212-64-146.compute-1.amazonaws.com:9090
+          uri: lb://ec2-18-212-64-146.compute-1.amazonaws.com:9090
           predicates:
             - Path=/question/**
 

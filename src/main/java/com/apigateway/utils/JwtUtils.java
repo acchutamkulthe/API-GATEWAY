@@ -3,9 +3,7 @@ package com.apigateway.utils;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 import java.util.function.Function;
 
@@ -17,7 +15,7 @@ public class JwtUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
-    private String SECRET_KEY = "SECRET_KEY";
+    private String SECRET_KEY = "secret";
 
    /* public boolean validateAccessToken(String token)
     {
@@ -72,9 +70,16 @@ public class JwtUtils {
     }
 
     public Boolean validateToken(String token) {
-        final String username = getSubject(token);
+        final String email = getSubject(token);
+        System.out.println("email ==>"+email);
         //return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-        return (isTokenExpired(token));
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        }catch (Exception e){
+         return false;
+        }
+
     }
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
