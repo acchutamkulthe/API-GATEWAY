@@ -1,9 +1,13 @@
 package com.apigateway.utils;
 
 import io.jsonwebtoken.*;
+import org.bouncycastle.util.encoders.Base64Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -15,7 +19,6 @@ public class JwtUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
-    private String SECRET_KEY = "secret";
 
    /* public boolean validateAccessToken(String token)
     {
@@ -56,6 +59,12 @@ public class JwtUtils {
         return false;
     }*/
 
+    private static String getSecretKey(){
+/*        String originalSecret = "Hello Việt Nam";
+        return Base64.getEncoder().encodeToString(originalSecret.getBytes());*/
+        return "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
+    }
+
     public String getSubject(String token)
     {
         return parsClaims(token).getSubject();
@@ -64,22 +73,27 @@ public class JwtUtils {
     private Claims parsClaims(String token)
     {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
     }
 
+/*    public Boolean validateToken(String token) {
+        final String username = getSubject(token);
+        //return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (isTokenExpired(token));
+    }*/
+
     public Boolean validateToken(String token) {
         final String email = getSubject(token);
-        System.out.println("email ==>"+email);
+        System.out.println("email ==>" + email);
         //return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(token);
             return true;
-        }catch (Exception e){
-         return false;
+        } catch (Exception e) {
+            return false;
         }
-
     }
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
@@ -92,6 +106,6 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(token).getBody();
     }
 }
